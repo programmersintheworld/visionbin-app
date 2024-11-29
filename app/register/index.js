@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import {useRouter} from 'expo-router';
+import { useRouter } from 'expo-router';
 import {
   Platform,
   StyleSheet,
@@ -12,10 +12,10 @@ import {
 import vision from "../../assets/vision0.png";
 
 export default function Page() {
-    const route = useRouter();
-    const handleForgotPassword = ()=>{
-        route.push('/login');
-    }
+  const route = useRouter();
+  const handleForgotPassword = () => {
+    route.push('/login');
+  }
   return (
     <View style={styles.container}>
       <Image source={vision} style={styles.image} resizeMode="contain" />
@@ -42,9 +42,9 @@ export default function Page() {
         secureTextEntry
       />
       <View style={styles.button}>
-      <TouchableOpacity >
-        <Text style={styles.buttonText}>Crea Tu Cuenta</Text>
-      </TouchableOpacity>
+        <TouchableOpacity >
+          <Text style={styles.buttonText}>Crea Tu Cuenta</Text>
+        </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
       <View style={styles.signUpContainer}>
@@ -54,71 +54,71 @@ export default function Page() {
         </TouchableOpacity>
       </View>
     </View>
-    
+
   );
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#4B9858",
-      padding: 20,
-    },
-    image: {
-      width: 200,
-      height: 200,
-      marginBottom: 20,
-    },
-    input: {
-      width: "80%",
-      height: 50,
-      borderColor: "#ccc",
-      borderWidth: 1,
-      borderRadius: 8,
-      paddingHorizontal: 10,
-      marginBottom: 15,
-      backgroundColor: "#9CE282",
-    },
-    button: {
-      width: "80%",
-      height: 50,
-      backgroundColor: "#F18A37",
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 15,
-      marginTop: 20,
-    },
-    buttonText: {
-      color: "#fff",
-      fontSize: 20,
-      fontWeight: "bold",
-    },
-    welcome: {
-      color: "white",
-      fontSize: 50,
-      textAlign: "center",
-      marginBottom: 20,
-    },
-    linkText: {
-      color: "#FFFFFF",
-      textDecorationLine: "underline",
-      fontSize: 14,
-      marginVertical: 10,
-    },
-    signUpContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: 20,
-    },
-    signUpText: {
-      color: "white",
-      fontSize: 14,
-    },
-    signUpLink: {
-      fontWeight: "bold",
-      marginLeft: 5,
-    },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4B9858",
+    padding: 20,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+  },
+  input: {
+    width: "80%",
+    height: 50,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    backgroundColor: "#9CE282",
+  },
+  button: {
+    width: "80%",
+    height: 50,
+    backgroundColor: "#F18A37",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 15,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  welcome: {
+    color: "white",
+    fontSize: 50,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  linkText: {
+    color: "#FFFFFF",
+    textDecorationLine: "underline",
+    fontSize: 14,
+    marginVertical: 10,
+  },
+  signUpContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  signUpText: {
+    color: "white",
+    fontSize: 14,
+  },
+  signUpLink: {
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
 });

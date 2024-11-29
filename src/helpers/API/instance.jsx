@@ -1,6 +1,6 @@
 import axios from "axios";
 const instance = axios.create({
-    baseURL: "localhost:8080",
+    baseURL: "https://visionbin.programmersintheworld.com/api",
     // baseURL : "api.link"
     headers: {
         'content-Type': 'application/json'
