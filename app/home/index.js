@@ -1,47 +1,75 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Image,
+  StatusBar,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import vision from "../../assets/vision.png";
+import user from "../../assets/user.png";
 
-export default function ReportForm() {
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.scrollContainer}>
-        <Text style={styles.title}>Nuevo Reporte</Text>
+const DATA = [
+  {
+    id: "1",
+  },
+];
 
-        <View style={styles.frame}>
-          <Text style={styles.headerText}>Fecha:</Text>
-          <TextInput
-            style={styles.input}
-            value={new Date().toLocaleDateString()}
-            editable={false}
-          />
+const Item = ({ title }) => (
+  <View style={styles.frame}>
+    <Text style={styles.headerText}>Reportes Realizados</Text>
+    <TouchableOpacity>
+      <View style={styles.item}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.button}>
+      <Text style={styles.buttonText}>Crear Nuevo</Text>
+    </TouchableOpacity>
 
-          <Text style={styles.headerText}>Lugar del reporte:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa el lugar" />
+    <View style={styles.frame}>
+      <Text style={styles.headerText}>Botes realizados</Text>
+      <TouchableOpacity>
+        <View style={styles.item}>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Crear Nuevo</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
-          <Text style={styles.headerText}>Foto del reporte:</Text>
-          <Image
-            source={{ uri: "https://via.placeholder.com/200" }}
-            style={styles.image}
-          />
-
-          <Text style={styles.headerText}>Descripción:</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Descripción del reporte"
-            multiline
-          />
-          
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Guardar Reporte</Text>
-          </View>
+const Page = () => (
+  <SafeAreaProvider>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.header}>
+          <TouchableOpacity>
+            <Image source={user} style={styles.userImage} />
+          </TouchableOpacity>
+          <Text style={styles.welcome}>Hola, User!</Text>
         </View>
 
-        <StatusBar style="auto" />
-      </View>
-    </ScrollView>
-  );
-}
+        <View style={styles.imageContainer}>
+          <Image source={vision} style={styles.image} resizeMode="contain" />
+        </View>
+
+        <FlatList
+          data={DATA}
+          renderItem={({ item }) => <Item title={item.title} />}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.flatListContent}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  </SafeAreaProvider>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -51,7 +79,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     alignItems: "center",
     padding: 10,
-    gap: 40,
+    gap: 20,
   },
   header: {
     flexDirection: "row",
@@ -85,12 +113,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 200,
     height: 80,
+    
   },
   title: {
     fontSize: 20,
     color: "white",
-    fontWeight: "bold",
-    marginBottom: 20,
   },
   frame: {
     width: 320,
@@ -120,19 +147,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  input: {
-    width: "80%",
-    padding: 10,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
-  },
   flatListContent: {
     alignItems: "center",
   },
 });
+
+export default Page;
