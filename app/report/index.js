@@ -29,7 +29,9 @@ export default function Page() {
         style={styles.image}
       />
       <StatusBar style="auto" />
+      
     </View>
+    
   );
 }
 
