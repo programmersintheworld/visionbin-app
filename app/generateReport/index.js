@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Importa useEffect
 import instance from "../../src/helpers/API/instance";
 import {
   StyleSheet,
@@ -8,38 +8,63 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Image,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from 'expo-location'; 
+import MapView, { Marker } from 'react-native-maps';
 
 export default function Page() {
   const route = useRouter();
   const today = new Date().toLocaleDateString();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [location, setLocation] = useState('');
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.error('Permission to access location was denied');
+      return;
+    }
+
+    let locationResult = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = locationResult.coords;
+    setLatitude(latitude);
+    setLongitude(longitude);
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   const handleSubmit = async () => {
-    // try {
-    //   const formatData = new FormData();
-    //   formatData.append('location', location);
-    //   formatData.append('description', description);
+    try {
+      const formatData = new FormData();
+      formatData.append('title', title);
+      formatData.append('description', description);
+      const user_id = await AsyncStorage.getItem('id_user');
+      formatData.append('user_id', user_id);
+      formatData.append("location_long", longitude);
+      formatData.append("location_lat", latitude);
 
-    //   const response = await instance.post('/reports', formatData, {
-    //     headers: { 'Content-Type': 'multipart/form-data' },
-    //   });
+      const response = await instance.post('/reports', formatData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
-    //   if (response.status === 201) {
-    //     route.push('/home');
-    //   }
-    // } catch (error) {
-    //   console.error('Error during login:', error.response?.data || error.message);
-    // }
+      if (response.status === 201) {
+        route.push('/home');
+      }
+    } catch (error) {
+      console.error('Error during login:', error.response?.data || error.message);
+    }
     route.push('/home');
   };
 
   const goBack = () => {
     route.push('/home');
   }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Crear un reporte</Text>
@@ -61,13 +86,19 @@ export default function Page() {
         value={description}
         onChangeText={setDescription}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Ubicación"
-        placeholderTextColor="white"
-        value={location}
-        onChangeText={setLocation}
-      />
+      {latitude && longitude && (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+        >
+          <Marker coordinate={{ latitude, longitude }} title="Ubicación del reporte" />
+        </MapView>
+      )}
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={[styles.linkText, styles.signUpLink, { color: "white", fontWeight: "bold" }]}>Generar reporte</Text>
@@ -130,5 +161,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 18,
+  },
+  map: {
+    width: '100%',
+    height: 200,
+    marginVertical: 20,
   },
 });

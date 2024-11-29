@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from "react-native";
+import { Platform, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useState } from "react";
 import vision from '../../assets/vision0.png';
 import { useRouter } from 'expo-router';
@@ -19,6 +19,10 @@ export default function Page() {
     }
 
     const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert('Error', 'Por favor, rellena todos los campos');
+            return;
+        }
         try {
             const formatData = new FormData();
             formatData.append('email', email);
@@ -30,6 +34,7 @@ export default function Page() {
 
             if (response.status === 200) {
                 await AsyncStorage.setItem('token', response.data.token);
+                await AsyncStorage.setItem('id_user', response.data.id);
                 route.push('/home');
             }
         } catch (error) {

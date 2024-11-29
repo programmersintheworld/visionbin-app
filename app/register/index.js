@@ -24,6 +24,10 @@ export default function Page() {
   }
 
   const handleRegister = async () => {
+    if (!email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Por favor, rellena todos los campos');
+      return;
+    }
     if (password !== confirmPassword) {
       Alert.alert("Error", "Las contraseñas no coinciden");
       return
@@ -40,6 +44,7 @@ export default function Page() {
       });
       if (response.status === 201) {
         await AsyncStorage.setItem('token', response.data.token);
+        await AsyncStorage.setItem('id_user', response.data.id);
         route.push('/home');
       }
     } catch (error) {
