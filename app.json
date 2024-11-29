@@ -4,7 +4,7 @@
     "slug": "visionbin-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/vision.png",
     "userInterfaceStyle": "light",
     "scheme": "visionbin-app",
     "newArchEnabled": true,
