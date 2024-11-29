@@ -86,14 +86,6 @@ export default function Page() {
       formatData.append("location_long", longitude);
       formatData.append("location_lat", latitude);
 
-      if (image) {
-        formatData.append("image", {
-          uri: image,
-          name: 'photo.jpg',
-          type: 'image/jpeg',
-        });
-      }
-
       const response = await instance.post('/reports', formatData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
