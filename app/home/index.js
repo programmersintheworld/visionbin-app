@@ -12,12 +12,15 @@ import {
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import vision from "../../assets/vision.png";
 import user from "../../assets/user.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from 'expo-router';
 
 const DATA = [
   {
     id: "1",
   },
 ];
+
 
 const Item = ({ title }) => (
   <View style={styles.frame}>
@@ -45,31 +48,38 @@ const Item = ({ title }) => (
   </View>
 );
 
-const Page = () => (
-  <SafeAreaProvider>
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <TouchableOpacity>
-            <Image source={user} style={styles.userImage} />
-          </TouchableOpacity>
-          <Text style={styles.welcome}>Hola, User!</Text>
-        </View>
+const Page = () => {
+  const route = useRouter();
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    route.push("/login")
+  }
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={handleLogout}>
+              <Image source={user} style={styles.userImage} />
+            </TouchableOpacity>
+            <Text style={styles.welcome}>Hola, User!</Text>
+          </View>
 
-        <View style={styles.imageContainer}>
-          <Image source={vision} style={styles.image} resizeMode="contain" />
-        </View>
+          <View style={styles.imageContainer}>
+            <Image source={vision} style={styles.image} resizeMode="contain" />
+          </View>
 
-        <FlatList
-          data={DATA}
-          renderItem={({ item }) => <Item title={item.title} />}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.flatListContent}
-        />
-      </ScrollView>
-    </SafeAreaView>
-  </SafeAreaProvider>
-);
+          <FlatList
+            data={DATA}
+            renderItem={({ item }) => <Item title={item.title} />}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.flatListContent}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  )
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 200,
     height: 80,
-    
+
   },
   title: {
     fontSize: 20,
