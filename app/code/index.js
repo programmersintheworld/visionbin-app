@@ -17,8 +17,7 @@ export default function Page() {
       Alert.alert("Error", "El código debe tener exactamente 6 dígitos.");
       return;
     }
-    Alert.alert("Éxito", "Correo y código validados correctamente.");
-
+    
   };
 
   return (

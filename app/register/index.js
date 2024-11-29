@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from 'expo-router';
+import { useState } from "react";
+import instance from "../../src/helpers/API/instance";
 import {
   Platform,
   StyleSheet,
@@ -10,11 +12,39 @@ import {
   TouchableOpacity,
 } from "react-native";
 import vision from "../../assets/vision0.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Page() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const route = useRouter();
   const handleForgotPassword = () => {
     route.push('/login');
+  }
+
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Las contraseñas no coinciden");
+      return
+    }
+
+    try {
+      const formatData = new FormData();
+      formatData.append('email', email);
+      formatData.append('password', password);
+      formatData.append('confirmPassword', confirmPassword);
+
+      const response = await instance.post('/auth/signup', formatData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if (response.status === 201) {
+        await AsyncStorage.setItem('token', response.data.token);
+        route.push('/home');
+      }
+    } catch (error) {
+      console.error('Error during login:', error.response?.data || error.message);
+    }
   }
   return (
     <View style={styles.container}>
@@ -28,21 +58,27 @@ export default function Page() {
         placeholderTextColor="white"
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
         placeholderTextColor="white"
         secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
       <TextInput
         style={styles.input}
         placeholder="Confirma tu Contraseña"
         placeholderTextColor="white"
         secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
       />
       <View style={styles.button}>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={handleRegister}>
           <Text style={styles.buttonText}>Crea Tu Cuenta</Text>
         </TouchableOpacity>
       </View>
