@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "VisionBin",
+    "slug": "visionbin-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "visionbin-app",
+    "splash": {
+      "image": "./src/assets/vision.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4B9858"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/vision.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./src/assets/vision.png",
+    },
+    "extra": {
+    },
+    "owner": "pitw",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ]
+    ]
+  }
+}
