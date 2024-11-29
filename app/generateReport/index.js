@@ -6,12 +6,15 @@ import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Page() {
   const route = useRouter();
@@ -20,6 +23,7 @@ export default function Page() {
   const [description, setDescription] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [image, setImage] = useState(null); // Para almacenar la imagen seleccionada
 
   const getLocation = async () => {
     try {
@@ -42,6 +46,36 @@ export default function Page() {
     getLocation();
   }, []);
 
+  const handleImagePicker = async () => {
+    const options = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    };
+
+    const result = await ImagePicker.launchImageLibraryAsync(options);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleCamera = async () => {
+    const options = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    };
+
+    const result = await ImagePicker.launchCameraAsync(options);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       const formatData = new FormData();
@@ -52,6 +86,14 @@ export default function Page() {
       formatData.append("location_long", longitude);
       formatData.append("location_lat", latitude);
 
+      if (image) {
+        formatData.append("image", {
+          uri: image,
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+      }
+
       const response = await instance.post('/reports', formatData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -60,7 +102,7 @@ export default function Page() {
         route.push('/home');
       }
     } catch (error) {
-      console.error('Error during login:', error.response?.data || error.message);
+      console.error('Error during submission:', error.response?.data || error.message);
     }
   };
 
@@ -69,48 +111,54 @@ export default function Page() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Crear un reporte</Text>
-      <Text style={styles.date}>{today}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Titulo del reporte"
-        placeholderTextColor="white"
-        value={title}
-        onChangeText={setTitle}
-      />
-      <TouchableOpacity style={styles.imageUploadButton}>
-        <Text style={styles.buttonText}>Subir Imagen</Text>
-      </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        placeholder="Descripción"
-        placeholderTextColor="white"
-        value={description}
-        onChangeText={setDescription}
-      />
-      {latitude !== "" && longitude !== "" && (
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: parseFloat(latitude),
-            longitude: parseFloat(longitude),
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}
-        >
-          <Marker coordinate={{ latitude: parseFloat(latitude), longitude: parseFloat(longitude) }} title="Ubicación del reporte" />
-        </MapView>
-      )}
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Crear un reporte</Text>
+        <Text style={styles.date}>{today}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Titulo del reporte"
+          placeholderTextColor="white"
+          value={title}
+          onChangeText={setTitle}
+        />
+        <TouchableOpacity style={styles.imageUploadButton} onPress={handleImagePicker}>
+          <Text style={styles.buttonText}>Seleccionar de la galería</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.imageUploadButton} onPress={handleCamera}>
+          <Text style={styles.buttonText}>Tomar una foto</Text>
+        </TouchableOpacity>
+        {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
+        <TextInput
+          style={styles.input}
+          placeholder="Descripción"
+          placeholderTextColor="white"
+          value={description}
+          onChangeText={setDescription}
+        />
+        {latitude !== "" && longitude !== "" && (
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            }}
+          >
+            <Marker coordinate={{ latitude: parseFloat(latitude), longitude: parseFloat(longitude) }} title="Ubicación del reporte" />
+          </MapView>
+        )}
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={[styles.linkText, styles.signUpLink, { color: "white", fontWeight: "bold" }]}>Generar reporte</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonBack} onPress={goBack}>
-        <Text style={[styles.linkText, styles.signUpLink, { color: "white", fontWeight: "bold" }]}>Regresar</Text>
-      </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={[styles.linkText, styles.signUpLink, { color: "white", fontWeight: "bold" }]}>Generar reporte</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonBack} onPress={goBack}>
+          <Text style={[styles.linkText, styles.signUpLink, { color: "white", fontWeight: "bold" }]}>Regresar</Text>
+        </TouchableOpacity>
+        <StatusBar style="auto" />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -147,6 +195,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F18A37',
     padding: 10,
     borderRadius: 5,
+    marginTop: 10,
+    width: '80%', // Establece un ancho fijo
+    alignItems: 'center', // Centra el texto dentro del botón
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
     marginTop: 10,
   },
   button: {

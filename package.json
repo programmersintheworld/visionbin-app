@@ -39,7 +39,8 @@
     "react-responsive": "^10.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "expo-location": "~18.0.2",
-    "react-native-maps": "1.18.0"
+    "react-native-maps": "1.18.0",
+    "expo-image-picker": "~16.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2"
