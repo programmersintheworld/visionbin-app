@@ -7,89 +7,101 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import vision from "../../assets/vision.png";
 import user from "../../assets/user.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
 const DATA = [
   {
     id: "1",
+    type: "Reporte",
+    title: "Reporte 1",
+  },
+  {
+    id: "2",
+    type: "Reporte",
+    title: "Reporte 2",
+  },
+  {
+    id: "3",
+    type: "Basura",
+    title: "Bote de basura",
+  },
+  {
+    id: "4",
+    type: "Basura",
+    title: "Bote de basura",
   },
 ];
 
+const Item = ({ title, type }) => {
+  const route = useRouter();
 
-const Item = ({ title }) => (
-  <View style={styles.frame}>
-    <Text style={styles.headerText}>Reportes Realizados</Text>
-    <TouchableOpacity>
-      <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.button}>
-      <Text style={styles.buttonText}>Crear Nuevo</Text>
-    </TouchableOpacity>
+  const handleCreateReport = () => {
+    route.push("/generateReport");
+  };
 
+  const handleReports = () => {
+    route.push("/report");
+  };
+
+  return (
     <View style={styles.frame}>
-      <Text style={styles.headerText}>Botes realizados</Text>
-      <TouchableOpacity>
+      <Text style={styles.headerText}>{type === "Reporte" ? "Reportes Realizados" : "Bote de Basura"}</Text>
+      <TouchableOpacity onPress={handleReports}>
         <View style={styles.item}>
           <Text style={styles.title}>{title}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleCreateReport}>
         <Text style={styles.buttonText}>Crear Nuevo</Text>
       </TouchableOpacity>
     </View>
-  </View>
-);
+  );
+};
 
 const Page = () => {
   const route = useRouter();
+
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
-    route.push("/login")
-  }
+    route.push("/login");
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={handleLogout}>
-              <Image source={user} style={styles.userImage} />
-            </TouchableOpacity>
-            <Text style={styles.welcome}>Hola, User!</Text>
-          </View>
-
-          <View style={styles.imageContainer}>
-            <Image source={vision} style={styles.image} resizeMode="contain" />
-          </View>
-
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <Item title={item.title} />}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </ScrollView>
+        <FlatList
+          data={DATA}
+          renderItem={({ item }) => <Item title={item.title} type={item.type} />}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.flatListContent}
+          ListHeaderComponent={
+            <View>
+              <View style={styles.header}>
+                <TouchableOpacity onPress={handleLogout}>
+                  <Image source={user} style={styles.userImage} />
+                </TouchableOpacity>
+                <Text style={styles.welcome}>Hola, User!</Text>
+              </View>
+              <View style={styles.imageContainer}>
+                <Image source={vision} style={styles.image} resizeMode="contain" />
+              </View>
+            </View>
+          }
+        />
       </SafeAreaView>
     </SafeAreaProvider>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#4B9858",
-  },
-  scrollContainer: {
-    alignItems: "center",
-    padding: 10,
-    gap: 20,
   },
   header: {
     flexDirection: "row",
@@ -111,6 +123,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginBottom: 40,
+    alignItems: "center",
   },
   image: {
     width: 200,
@@ -123,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 200,
     height: 80,
-
+    alignItems: "center",
   },
   title: {
     fontSize: 20,
