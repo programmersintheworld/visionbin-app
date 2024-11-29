@@ -94,8 +94,9 @@ export default function Page() {
         route.push('/home');
       }
     } catch (error) {
-      console.error('Error during submission:', error.response?.data || error.message);
+      console.error('Error during login:', error.response?.data || error.message);
     }
+    route.push('/home');
   };
 
   const goBack = () => {
