@@ -7,14 +7,13 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "visionbin-app",
+    "newArchEnabled": true,
     "splash": {
       "image": "./src/assets/vision.png",
       "resizeMode": "contain",
       "backgroundColor": "#4B9858"
     },
-    "ios": {
-      "supportsTablet": true
-    },
+   
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/vision.png",
@@ -23,7 +22,7 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./src/assets/vision.png",
+      "favicon": "./src/assets/vision.png"
     },
     "extra": {
     },

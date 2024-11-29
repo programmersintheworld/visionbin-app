@@ -1,50 +1,54 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from "react-native";
+import { Platform, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import vision from '../../assets/vision0.png';
-import {useRouter} from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 
 export default function Page() {
-    const route = useRouter();
-    
-    const handleRegister = ()=>{
-        route.push('/register');
+  const route = useRouter();
+  const [code, setCode] = useState("");
+
+  const handleForgotRegister = () => {
+    route.push('/register');
+  };
+
+  const handleNext = () => {
+    if (code.length !== 6) {
+      Alert.alert("Error", "El código debe tener exactamente 6 dígitos.");
+      return;
     }
-    const handleForgotPassword = ()=>{
-        route.push('/forgot-password');
-    }
+    Alert.alert("Éxito", "Correo y código validados correctamente.");
+
+  };
+
   return (
     <View style={styles.container}>
       <Image source={vision} style={styles.image} resizeMode="contain" />
-      
       <Text style={styles.welcome}>
-        Bienvenido
+        ¿Olvidaste tu Contraseña?
       </Text>
-      
+      <Text style={styles.welcome}>
+        Ingresa el código que se envió a tu email
+      </Text>
+
       <TextInput
         style={styles.input}
-        placeholder="Correo electrónico"
+        placeholder="Ingresa código de 6 dígitos"
         placeholderTextColor="white"
-        keyboardType="email-address"
-        autoCapitalize="none"
+        keyboardType="numeric"
+        maxLength={6} 
+        textAlign="center"
+        value={code}
+        onChangeText={setCode}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        placeholderTextColor="white"
-        secureTextEntry
-      />
-      
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
+
+      <TouchableOpacity style={styles.button} onPress={handleNext}>
+        <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
-      </TouchableOpacity>
-      
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>¿No tienes cuenta?</Text>
-        <TouchableOpacity onPress={handleRegister}>
+        <TouchableOpacity onPress={handleForgotRegister}>
           <Text style={[styles.linkText, styles.signUpLink]}> Crea una</Text>
         </TouchableOpacity>
       </View>
@@ -76,6 +80,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: "#9CE282",
+    fontSize: 18,
+    color: "#fff",
   },
   button: {
     width: "80%",
@@ -93,7 +99,7 @@ const styles = StyleSheet.create({
   },
   welcome: {
     color: "white",
-    fontSize: 50,
+    fontSize: 30,
     textAlign: "center",
     marginBottom: 20,
   },

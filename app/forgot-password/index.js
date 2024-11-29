@@ -5,46 +5,35 @@ import {useRouter} from 'expo-router';
 
 export default function Page() {
     const route = useRouter();
-    
-    const handleRegister = ()=>{
-        route.push('/register');
-    }
-    const handleForgotPassword = ()=>{
-        route.push('/forgot-password');
+    const hadleCode = ()=>{
+        route.push('/code');
     }
   return (
     <View style={styles.container}>
       <Image source={vision} style={styles.image} resizeMode="contain" />
       
       <Text style={styles.welcome}>
-        Bienvenido
+        ¿Olvidaste tu Contraseña?
       </Text>
-      
+      <Text style={styles.welcome}>
+      Recuperala!
+      </Text>
       <TextInput
         style={styles.input}
-        placeholder="Correo electrónico"
+        placeholder="Ingresa tu Correo electrónico"
         placeholderTextColor="white"
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        placeholderTextColor="white"
-        secureTextEntry
-      />
-      
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
+    
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
+        <Text style={styles.buttonText}>Siguiente</Text>
       </TouchableOpacity>
       
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>¿No tienes cuenta?</Text>
-        <TouchableOpacity onPress={handleRegister}>
+        <TouchableOpacity onPress={hadleCode}>
           <Text style={[styles.linkText, styles.signUpLink]}> Crea una</Text>
         </TouchableOpacity>
       </View>
@@ -93,7 +82,7 @@ const styles = StyleSheet.create({
   },
   welcome: {
     color: "white",
-    fontSize: 50,
+    fontSize: 45,
     textAlign: "center",
     marginBottom: 20,
   },
@@ -116,4 +105,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 5,
   },
+  recu:{
+    color: "white",
+    fontSize: 40,
+    textAlign: "center",
+    marginBottom: 20,
+  }
 });

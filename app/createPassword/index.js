@@ -6,48 +6,34 @@ import {useRouter} from 'expo-router';
 export default function Page() {
     const route = useRouter();
     
-    const handleRegister = ()=>{
-        route.push('/register');
-    }
-    const handleForgotPassword = ()=>{
-        route.push('/forgot-password');
-    }
   return (
     <View style={styles.container}>
       <Image source={vision} style={styles.image} resizeMode="contain" />
       
       <Text style={styles.welcome}>
-        Bienvenido
+        ¿Olvidaste tu Contraseña?
+      </Text>
+      <Text style={styles.welcome}>
+      Crea Tu Nueva Contraseña
       </Text>
       
-      <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        placeholderTextColor="white"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+      
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
         placeholderTextColor="white"
         secureTextEntry
       />
-      
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
+      <TextInput
+        style={styles.input}
+        placeholder="Confirma tu Contraseña"
+        placeholderTextColor="white"
+        secureTextEntry
+      />
 
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-      
-      <View style={styles.signUpContainer}>
-        <Text style={styles.signUpText}>¿No tienes cuenta?</Text>
-        <TouchableOpacity onPress={handleRegister}>
-          <Text style={[styles.linkText, styles.signUpLink]}> Crea una</Text>
-        </TouchableOpacity>
-      </View>
 
       <StatusBar style="auto" />
     </View>

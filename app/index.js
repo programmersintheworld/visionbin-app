@@ -6,7 +6,7 @@ export default function Page() {
     useEffect(() => {
         const navigateToLogin = async () => {
             await new Promise(resolve => setTimeout(resolve, 5100));
-            router.navigate('/home');
+            router.navigate('/login');
         };
 
         navigateToLogin();
