@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
-import React, { useState, useEffect } from "react"; // Importa useEffect
+import React, { useState, useEffect } from "react";
 import instance from "../../src/helpers/API/instance";
 import {
   StyleSheet,
@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Location from 'expo-location'; 
+import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 
 export default function Page() {
@@ -22,16 +22,20 @@ export default function Page() {
   const [longitude, setLongitude] = useState("");
 
   const getLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      console.error('Permission to access location was denied');
-      return;
-    }
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
 
-    let locationResult = await Location.getCurrentPositionAsync({});
-    const { latitude, longitude } = locationResult.coords;
-    setLatitude(latitude);
-    setLongitude(longitude);
+      let locationResult = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = locationResult.coords;
+      setLatitude(latitude);
+      setLongitude(longitude);
+    } catch (error) {
+      console.error('Error getting location:', error);
+    }
   };
 
   useEffect(() => {
@@ -58,7 +62,6 @@ export default function Page() {
     } catch (error) {
       console.error('Error during login:', error.response?.data || error.message);
     }
-    route.push('/home');
   };
 
   const goBack = () => {
@@ -86,17 +89,17 @@ export default function Page() {
         value={description}
         onChangeText={setDescription}
       />
-      {latitude && longitude && (
+      {latitude !== "" && longitude !== "" && (
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: latitude,
-            longitude: longitude,
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
           }}
         >
-          <Marker coordinate={{ latitude, longitude }} title="Ubicación del reporte" />
+          <Marker coordinate={{ latitude: parseFloat(latitude), longitude: parseFloat(longitude) }} title="Ubicación del reporte" />
         </MapView>
       )}
 

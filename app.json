@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "VisionBin",
-    "slug": "visionbin-app",
+    "slug": "pitw",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/vision.png",
@@ -13,7 +13,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#4B9858"
     },
-   
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/vision.png",
@@ -25,8 +24,14 @@
       "favicon": "./src/assets/vision.png"
     },
     "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "029f935d-d3b2-429f-8a87-cba2049eda30"
+      }
     },
-    "owner": "pitw",
+    "owner": "fasdatec",
     "plugins": [
       "expo-router",
       [

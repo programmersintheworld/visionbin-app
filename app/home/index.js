@@ -85,7 +85,7 @@ const Page = () => {
                 <TouchableOpacity onPress={handleLogout}>
                   <Image source={user} style={styles.userImage} />
                 </TouchableOpacity>
-                <Text style={styles.welcome}>Hola, User!</Text>
+                <Text style={styles.welcome}>Hola, Usuario!</Text>
               </View>
               <View style={styles.imageContainer}>
                 <Image source={vision} style={styles.image} resizeMode="contain" />
